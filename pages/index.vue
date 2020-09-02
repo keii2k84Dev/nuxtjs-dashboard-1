@@ -16,7 +16,7 @@
             </v-card-text>
             <v-card-actions>
               <v-layout justify-center align-center>
-                <v-btn color="success" :disabled="isDisabled" @click.prevent="authenticate">Login</v-btn>
+                <v-btn color="success"  @click.prevent="authenticate">Login</v-btn>
               </v-layout>
             </v-card-actions>
           </material-card>
@@ -36,9 +36,9 @@
     },
     data() {
       return {
-        username: 'admin',
-        password: 'admin',
-        defaultUserPassword: 'admin'
+        username: '',
+        password: '',
+        defaultUserPassword: ''
       }
     },
     computed: {
@@ -48,12 +48,15 @@
     },
     methods: {
       ...mapActions({
-        setUsername: 'user/setUsername'
+        setUsername: 'user/setUsername',
+        isTypeUser: 'user/isTypeUser',
       }),
 
       async authenticate() {
-        if (!this.isDisabled) {
-          await this.setUsername(this.defaultUserPassword);
+        const ret =  await this.isTypeUser(this.username, this.password)
+        console.log('test',ret)
+        if (ret) {
+          await this.setUsername(this.username);
           this.$router.push({ path: 'dashboard' });
         }
       }
